@@ -40,19 +40,12 @@ namespace System.Windows.Forms
 
                 minutesControl.MinutesHover += new System.EventHandler<ClockEventArgs>(this.Minutes_Hover);
 
-                minutesControl.Initialized += new System.EventHandler(this.Minutes_Initialized);
+                uint minutes = uint.Parse(this.minutesLabel.Text);
+
+                minutesControl.Initialize(minutes);
 
                 this.contextMenue.Show(point, minutesControl);
             }
-        }
-
-        private void Minutes_Initialized(object sender, EventArgs e)
-        {
-            MinutesPicker minutesControl = (MinutesPicker)sender;
-
-            uint minutes = uint.Parse(this.minutesLabel.Text);
-
-            minutesControl.Initialize(minutes);
         }
 
         private void LabelHour_MouseClick(object sender, MouseEventArgs e)
@@ -71,19 +64,12 @@ namespace System.Windows.Forms
 
                 hourControl.HourHover += new System.EventHandler<ClockEventArgs>(this.Hours_Hover);
 
-                hourControl.Initialized += new System.EventHandler(this.Hour_Initialized);
+                uint hours = uint.Parse(this.hoursLabel.Text);
+
+                hourControl.Initialize(hours);
 
                 this.contextMenue.Show(point, hourControl);
             }
-        }
-
-        private void Hour_Initialized(object sender, EventArgs e)
-        {
-            HourPicker hourControl = (HourPicker)sender;
-
-            uint hours = uint.Parse(this.hoursLabel.Text);
-
-            hourControl.Initialize(hours);
         }
 
         private void Hours_Hover(object sender, ClockEventArgs e)

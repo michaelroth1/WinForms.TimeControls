@@ -4,13 +4,11 @@ namespace System.Windows.Forms
 {
     public partial class ClockControl : UserControl
     {
-        private int _initialCount = 0;
+        private ClockPoint _clockPoint;
 
         public event EventHandler<ClockEventArgs> TimeChanged;
 
         public event EventHandler<ClockEventArgs> ClockHover;
-
-        public event EventHandler<EventArgs> ClockInitialized;
 
         public ClockControl()
         {
@@ -37,7 +35,23 @@ namespace System.Windows.Forms
 
             ClockPoint clockPoint = GetClockPointByNumber(point);
 
-            DrawLine(clockPoint);
+            clockPoint.BackgroundImage = TimeControls.Properties.Resources.icons8_filled_circle_60;
+
+            DrawLine(clockPoint, this.CreateGraphics());
+
+            this._clockPoint = clockPoint;
+        }
+
+        public uint GetTime()
+        {
+            if (_clockPoint != null)
+            {
+                return this.GetNumberOfClockPoint(this._clockPoint);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         /// <summary>
@@ -91,52 +105,45 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns the number of the given 'clockpoint'
         /// </summary>
-        private int GetNumberOfClockPoint(ClockPoint clockPoint)
+        private uint GetNumberOfClockPoint(ClockPoint clockPoint)
         {
             string name = clockPoint.Name;
 
             var number = name.Replace("clockPoint", "");
 
-            return System.Convert.ToInt32(number);
+            return uint.Parse(number);
         }
 
         /// <summary>
-        /// Draw the line between the centerpoint of the control and the given 'clockpoint'
+        /// Drawing the blue line from the center point to the active 'clockPoint'
         /// </summary>
-        private void DrawLine(ClockPoint clockPoint)
+        private void DrawLine(ClockPoint clockPoint, Graphics graphics)
         {
             Pen pen = new Pen(Color.DodgerBlue);
-            var graphics = this.CreateGraphics();
-            graphics.Clear(BackColor);
+
+            graphics.Clear(this.BackColor);
 
             var endPoint = new Point(clockPoint.Location.X + 10, clockPoint.Location.Y + 10);
 
             graphics.DrawLine(pen, 75, 77, endPoint.X, endPoint.Y);
-
-            clockPoint.BackgroundImage = TimeControls.Properties.Resources.icons8_filled_circle_60;
         }
 
         /// <summary>
-        /// Initialize the Clock after drawing (wait for completely painting the Control with the blue line)
+        /// Triggering the redrawing of the blue line 
+        /// in case of repainting the control
         /// </summary>
-        /// <remarks>the number 3 is figured out by trying and error</remarks>
         private void ClockControl_Paint(object sender, PaintEventArgs e)
         {
-            if (_initialCount < 3)
+            if (_clockPoint != null)
             {
-                _initialCount++;
-                this.SetTime();
-            }
-            else if (_initialCount == 3)
-            {
-                _initialCount++;
-                this.ClockInitialized?.Invoke(this, EventArgs.Empty);
+                this.DrawLine(_clockPoint, e.Graphics);
             }
         }
 
         private void Point_Click(object sender, EventArgs e)
         {
             ClockPoint clockPoint = (ClockPoint)sender;
+
             var args = new ClockEventArgs(uint.Parse(clockPoint.LabelText));
             this.TimeChanged?.Invoke(this, args);
         }
@@ -144,8 +151,8 @@ namespace System.Windows.Forms
         private void Point_MouseEnter(object sender, EventArgs e)
         {
             var clockPoint = (ClockPoint)sender;
-            this.ClearClock();
-            this.DrawLine(clockPoint);
+            uint pointNumber = this.GetNumberOfClockPoint(clockPoint);
+            this.SetTime(pointNumber);
 
             var args = new ClockEventArgs(uint.Parse(clockPoint.LabelText));
             this.ClockHover?.Invoke(this, args);

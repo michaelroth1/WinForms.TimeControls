@@ -1,15 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace System.Windows.Forms
+﻿namespace System.Windows.Forms
 {
     public partial class HourPicker : UserControl
     {
         public event EventHandler<ClockEventArgs> HourChanged;
 
         public event EventHandler<ClockEventArgs> HourHover;
-
-        public event EventHandler Initialized;
 
         public HourPicker()
         {
@@ -21,11 +16,17 @@ namespace System.Windows.Forms
         private void AMButton_Click(object sender, EventArgs e)
         {
             this.clockControl.InitializeClock(0, 1);
+
+            var args = new ClockEventArgs(this.clockControl.GetTime());
+            this.HourHover?.Invoke(this, args);
         }
 
         private void PMButton_Click(object sender, EventArgs e)
         {
             this.clockControl.InitializeClock(12, 1);
+
+            var args = new ClockEventArgs(this.clockControl.GetTime() + 12);
+            this.HourHover?.Invoke(this, args);
         }
 
         public void Initialize(uint hours)
@@ -54,11 +55,6 @@ namespace System.Windows.Forms
         private void ClockControl_ClockHover(object sender, ClockEventArgs e)
         {
             this.HourHover?.Invoke(this, e);
-        }
-
-        private void ClockControl_Initialized(object sender, EventArgs e)
-        {
-            this.Initialized?.Invoke(this, e);
         }
     }
 }

@@ -13,16 +13,17 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             this.timePicker1.SetTime("01:35");
-        }
-
-        private void clockControl1_ClockInitialized(object sender, EventArgs e)
-        {
             this.clockControl1.SetTime(5);
         }
 
         private void TimePicker1_TimeChanged(object sender, TimePickerEventArgs e)
         {
             MessageBox.Show(e.FormattedTime);
+        }
+
+        private void ClockControl1_TimeChanged(object sender, ClockEventArgs e)
+        {
+            MessageBox.Show(e.TimePoint.ToString());
         }
     }
 }

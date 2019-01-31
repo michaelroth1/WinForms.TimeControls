@@ -6,8 +6,6 @@
 
         public event EventHandler<ClockEventArgs> MinutesHover;
 
-        public event EventHandler Initialized;
-
         public MinutesPicker()
         {
             InitializeComponent();
@@ -37,11 +35,6 @@
         private void ClockControl_ClockHover(object sender, ClockEventArgs e)
         {
             this.MinutesHover?.Invoke(this, e);
-        }
-
-        private void ClockControl_ClockInitialized(object sender, EventArgs e)
-        {
-            this.Initialized?.Invoke(this, e);
         }
     }
 }

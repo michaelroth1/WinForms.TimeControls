@@ -41,7 +41,6 @@
             this.clockControl.TabIndex = 0;
             this.clockControl.TimeChanged += new System.EventHandler<ClockEventArgs>(this.ClockControl_TimeChanged);
             this.clockControl.ClockHover += new System.EventHandler<ClockEventArgs>(this.ClockControl_ClockHover);
-            this.clockControl.ClockInitialized += new System.EventHandler<System.EventArgs>(this.ClockControl_ClockInitialized);
             // 
             // MinutesControl
             // 

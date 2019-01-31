@@ -50,7 +50,6 @@ namespace WindowsFormsApp1
             this.clockControl1.Name = "clockControl1";
             this.clockControl1.Size = new System.Drawing.Size(150, 152);
             this.clockControl1.TabIndex = 3;
-            this.clockControl1.ClockInitialized += new System.EventHandler<System.EventArgs>(this.clockControl1_ClockInitialized);
             // 
             // Form1
             // 
